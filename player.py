@@ -52,6 +52,8 @@ class Player(CircleShape):
         if keys[pygame.K_SPACE]:
             self.shoot()
 
+        self.off_screen_wrap()
+
     def shoot(self) ->None:
         # if we waited long enough, we can shoot
         if self.shot_cooldown > 0:

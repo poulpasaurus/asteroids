@@ -16,6 +16,7 @@ class Asteroid(CircleShape):
     #overide
     def update(self, dt: float) -> None:
         self.position += self.velocity * dt
+        self.off_screen_wrap(ASTEROID_MAX_RADIUS)
 
     def split(self) -> None:
         self.kill()
@@ -30,4 +31,3 @@ class Asteroid(CircleShape):
         angle = random.uniform(20, 50)
         ast1.velocity = self.velocity.rotate(angle) * 1.2
         ast2.velocity = self.velocity.rotate(-angle) * 1.2
-        

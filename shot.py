@@ -13,3 +13,5 @@ class Shot(CircleShape):
     #override
     def update(self, dt: float) -> None:
         self.position += self.velocity * dt
+        # shot exiting the screen get deleted
+        self.off_screen_kill()
