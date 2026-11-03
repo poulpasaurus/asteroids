@@ -1,4 +1,5 @@
 import pygame
+from constants import *
 
 # Base class for game objects
 class CircleShape(pygame.sprite.Sprite):
@@ -19,10 +20,38 @@ class CircleShape(pygame.sprite.Sprite):
         # must override
         pass
 
-    def update(self, dt: float) -> None:gi
+    def update(self, dt: float) -> None:
         # must override
         pass
 
     def collides_with(self, other: "CircleShape") -> bool:
         dist = self.position.distance_to(other.position)
         return dist <= (self.radius + other.radius)
+
+    def off_screen_wrap(self, wrap_margin=None) -> None:
+        """
+        Wrap an object around the screen instead of letting it drift into the void
+        Used by the player and asteroids
+        """
+        # to keep the current asteroid spawning mechanic
+        if wrap_margin is None:
+            wrap_margin = self.radius
+
+        # wrap around the screen
+        if self.position.x < (-wrap_margin):
+            self.position.x = (SCREEN_WIDTH + self.radius)
+        if self.position.x > (wrap_margin + SCREEN_WIDTH):
+            self.position.x = -self.radius
+
+        if self.position.y < (-wrap_margin):
+            self.position.y = (SCREEN_HEIGHT + self.radius)
+        if self.position.y > (wrap_margin + SCREEN_HEIGHT):
+            self.position.y = (-self.radius)
+
+    def off_screen_kill(self) -> None:
+        """
+        Kill an object off-screen instead of letting it drift into the void
+        Used by the shots
+        """
+        if (self.position.x < (-self.radius)) or (self.position.x > (self.radius + SCREEN_WIDTH)) or (self.position.y < (-self.radius)) or (self.position.y > (self.radius + SCREEN_HEIGHT)):
+            self.kill()
