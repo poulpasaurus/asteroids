@@ -6,6 +6,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from score import Score
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -32,6 +33,8 @@ def main():
     player = Player(x, y)
     asteroid_field = AsteroidField()
 
+    score = Score()
+
     while True:
         log_state()
         for event in pygame.event.get():
@@ -42,6 +45,24 @@ def main():
 
         # update every updatable
         updatable.update(dt)
+
+        # detecting collisions
+        for astr in asteroids:
+            if player.collides_with(astr):
+                log_event("player_hit")
+                print("Game over!")
+                # update the scores file
+                score.update_scores()
+                sys.exit()
+
+            for shot in shots:
+                if astr.collides_with(shot):
+                    log_event("asteroid_shot")
+                    score.increase(astr.radius)
+                    shot.kill()
+                    astr.split()
+                    break
+        
         # draw every drawable sprite instead of doing it one by one
         # /!\ 
         # Group.draw(screen) does not call your draw method
@@ -51,19 +72,8 @@ def main():
         for obj in drawable:
             obj.draw(screen)
 
-        # detecting collisions
-        for astr in asteroids:
-            if player.collides_with(astr):
-                log_event("player_hit")
-                print("Game over!")
-                sys.exit()
-
-            for shot in shots:
-                if astr.collides_with(shot):
-                    log_event("asteroid_shot")
-                    shot.kill()
-                    astr.split()
-                    break
+        # draw the HUD after the rest so it's always on top
+        score.draw(screen)
                 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
