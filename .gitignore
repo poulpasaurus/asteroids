@@ -7,7 +7,7 @@ wheels/
 *.egg-info
 game_state.jsonl
 game_events.jsonl
-high_scores.txt
+scores.txt
 
 # Virtual environments
 .venv
