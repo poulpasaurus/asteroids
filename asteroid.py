@@ -11,7 +11,7 @@ class Asteroid(CircleShape):
 
     #override
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.circle(screen, "red", self.position, self.radius, LINE_WIDTH)
+        pygame.draw.circle(screen, "grey", self.position, self.radius, LINE_WIDTH)
 
     #overide
     def update(self, dt: float) -> None:
