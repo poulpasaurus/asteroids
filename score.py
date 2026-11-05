@@ -8,12 +8,11 @@ class Score():
         self.high_scores: list[int] = self.read_scores_file()
         self.high_score: int = 0
         if len(self.high_scores) > 0:
-            self.high_score: int = self.high_scores[0]
-        self.font = self.font = pygame.font.Font(None, 30)
+            self.high_score = self.high_scores[0]
+        self.font = pygame.font.Font(None, 30)
 
-    def increase(self, asteroid_radius: float) -> None:
-        kind: int = asteroid_radius // ASTEROID_MIN_RADIUS
-        self.current_score += ASTEROIDS_SCORE[kind - 1]
+    def increase(self, asteroid_kind: int) -> None:
+        self.current_score += ASTEROIDS_SCORE[asteroid_kind]
         if self.high_score < self.current_score:
             self.high_score = self.current_score
 
@@ -26,10 +25,12 @@ class Score():
         try:
             with open(SCORES_FILE, "r") as f:
                 scores_txt = f.readlines()
-                scores = [(int) (s[:-1]) for s in scores_txt]
+                scores = [int(s[:-1]) for s in scores_txt]
                 scores.sort(reverse=True)
+        except OSError:
+            log_event("[ERROR] Score file doesn't exists")
         except:
-            log_event("[ERROR] Failed to read scores file")
+            log_event("[ERROR] Score file if wrongly formated")
         return scores
     
     def update_scores(self) -> None:
@@ -43,10 +44,9 @@ class Score():
             scores.sort(reverse=True)
 
             with open(SCORES_FILE, "w") as f:
-                if len(scores) >= HIGH_SCORES_TAB_LENGTH:
-                    f.writelines([(str) (sc) + "\n" for sc in scores[:HIGH_SCORES_TAB_LENGTH]])
-                else:
-                    f.writelines([(str) (sc) + "\n" for sc in scores])
+                f.writelines([str(sc) + "\n" for sc in scores[:HIGH_SCORES_TAB_LENGTH]])
+        except OSError:
+            log_event("[ERROR] Score file doesn't exists")
         except:
             log_event("[ERROR] Failed to write scores file")
 
