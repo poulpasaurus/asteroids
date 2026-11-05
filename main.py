@@ -58,7 +58,7 @@ def main():
             for shot in shots:
                 if astr.collides_with(shot):
                     log_event("asteroid_shot")
-                    score.increase(astr.radius)
+                    score.increase(astr.kind)
                     shot.kill()
                     astr.split()
                     break
