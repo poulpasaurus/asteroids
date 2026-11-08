@@ -1,5 +1,6 @@
 import pygame
 from circleshape import CircleShape
+from shotparticle import ShotParticle
 from constants import SHOT_RADIUS, LINE_WIDTH, SHOW_HITBOXES
 
 class Shot(CircleShape):
@@ -18,3 +19,7 @@ class Shot(CircleShape):
         self.position += self.velocity * dt
         # shot exiting the screen get deleted
         self.off_screen_kill()
+        self.trail()
+
+    def trail(self) -> None:
+        ShotParticle(self.position.x, self.position.y)

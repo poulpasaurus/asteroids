@@ -2,6 +2,7 @@ import pygame
 import random
 from logger import log_event
 from circleshape import CircleShape
+from asteroidparticle import AsteroidExplosionParticle
 from constants import *
 
 
@@ -33,6 +34,8 @@ class Asteroid(CircleShape):
 
     def split(self) -> None:
         self.kill()
+        for _ in range(self.kind * random.randint(3,5)):
+            AsteroidExplosionParticle(self.position.x, self.position.y)
         if self.kind <= 1:
             # smallest asteroid, disapear without splitting
             return

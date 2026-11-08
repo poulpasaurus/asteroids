@@ -1,5 +1,7 @@
 import pygame
+import random
 from circleshape import CircleShape
+from thrusterparticle import ThrusterParticle
 from shot import Shot
 from constants import *
 
@@ -63,6 +65,7 @@ class Player(CircleShape):
         if keys[pygame.K_z]:
             self.old_velocity = self.velocity
             self.move(dt)
+            self.thrust()
         
         if keys[pygame.K_q]:
             self.rotate(-dt)
@@ -96,3 +99,9 @@ class Player(CircleShape):
         self.velocity = pygame.Vector2(0, 0)
         self.old_velocity = pygame.Vector2(0, 0)
         self.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+
+    def thrust(self) -> None:
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        thruster_pos = self.position - forward  * self.radius
+        for i in range(random.randint(1, THRUSTER_PARTICLE_MAX_COUNT)):
+            thruster = ThrusterParticle(thruster_pos.x, thruster_pos.y, self.rotation)
