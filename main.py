@@ -7,6 +7,7 @@ from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
 from score import Score
+from particle import Particle
 
 def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -27,6 +28,7 @@ def main():
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
     Shot.containers = (shots, updatable, drawable)
+    Particle.containers = (updatable, drawable)
     
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
