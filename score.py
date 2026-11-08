@@ -12,7 +12,7 @@ class Score():
         self.font = pygame.font.Font(None, 30)
 
     def increase(self, asteroid_kind: int) -> None:
-        self.current_score += ASTEROIDS_SCORE[asteroid_kind]
+        self.current_score += ASTEROID_SCORES[asteroid_kind]
         if self.high_score < self.current_score:
             self.high_score = self.current_score
 
