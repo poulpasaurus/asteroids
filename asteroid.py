@@ -27,7 +27,7 @@ class Asteroid(CircleShape):
         if SHOW_HITBOXES:
             pygame.draw.circle(screen, "red", self.position, self.hitbox_radius, LINE_WIDTH)
 
-    #overide
+    #override
     def update(self, dt: float) -> None:
         self.position += self.velocity * dt
         self.off_screen_wrap(ASTEROID_MAX_RADIUS)
@@ -37,7 +37,7 @@ class Asteroid(CircleShape):
         for _ in range(self.kind * random.randint(3,5)):
             AsteroidExplosionParticle(self.position.x, self.position.y)
         if self.kind <= 1:
-            # smallest asteroid, disapear without splitting
+            # smallest asteroid, disappear without splitting
             return
 
         log_event("asteroid_split")

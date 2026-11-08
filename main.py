@@ -23,7 +23,7 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
-    # add ALL FUTURE intances of players to all groups it should belong to
+    # add ALL FUTURE instances of players to all groups it should belong to
     Player.containers = (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable,)
@@ -67,13 +67,8 @@ def main():
                     shot.kill()
                     astr.split()
                     break
-        
-        # draw every drawable sprite instead of doing it one by one
-        # /!\ 
-        # Group.draw(screen) does not call your draw method
-        # It expects each sprite to have .image and .rect attributes and blits those 
-        # My shapes don't have them, because they're drawn with pygame.draw.polygon 
-        # So I need to loop over the group and call each object's own draw()
+
+        # use each object draw method since we don't use images
         for obj in drawable:
             obj.draw(screen)
 
