@@ -8,12 +8,19 @@ from constants import *
 class Asteroid(CircleShape):
     def __init__(self, x: float, y: float, kind: int) -> None:
         self.kind = kind
+        self.color = random.choice(ASTEROID_COLORS)
+        # used to draw a jagged sphere
+        self.random_length: list[float] = [
+            random.uniform(ASTEROID_MIN_POINT_PERCENTAGE, ASTEROID_MAX_POINT_PERCENTAGE) for _ in range(ASTEROID_POINTS)
+        ]
         radius = self.kind * ASTEROID_MIN_RADIUS
         super().__init__(x, y, radius)
 
     #override
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.circle(screen, "grey", self.position, self.radius, LINE_WIDTH)
+        line_width = LINE_WIDTH # only outline 
+        # line_width = 0 # filled in asteroids, 0 is the default for polygon, we give it explicitly    
+        pygame.draw.polygon(screen, self.color, self.rock(), width=line_width)
 
     #overide
     def update(self, dt: float) -> None:
@@ -33,3 +40,15 @@ class Asteroid(CircleShape):
         angle = random.uniform(20, 50)
         ast1.velocity = self.velocity.rotate(angle) * 1.2
         ast2.velocity = self.velocity.rotate(-angle) * 1.2
+
+    def rock(self) -> list[pygame.Vector2]:
+        """draw an irregular circle"""
+        angle = 360 / ASTEROID_POINTS
+        points = []
+        for i in range(ASTEROID_POINTS):
+            unit_vector = pygame.Vector2(0, 1)
+            rotated_vector = unit_vector.rotate(i * angle)
+            forward_vector = rotated_vector * self.radius * self.random_length[i]
+            position = self.position + forward_vector
+            points.append(position)
+        return points

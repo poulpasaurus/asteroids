@@ -19,6 +19,12 @@ ASTEROID_SPAWN_RATE_SECONDS = 1.2
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
 # kind 1 asteroids are the smallets and worth the most points
 ASTEROIDS_SCORE = {1: 100, 2: 50, 3: 20}
+# shades of grey
+ASTEROID_COLORS = [(61, 61, 61), (100, 100, 100), (114, 114, 114), (161, 161, 161)]
+# irregular circles
+ASTEROID_POINTS = 15
+ASTEROID_MIN_POINT_PERCENTAGE = 0.7 # % of radius
+ASTEROID_MAX_POINT_PERCENTAGE = 1
 
 SCORES_FILE = "scores.txt"
 HIGH_SCORES_TAB_LENGTH = 10
