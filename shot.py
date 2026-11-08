@@ -1,6 +1,6 @@
 import pygame
 from circleshape import CircleShape
-from constants import SHOT_RADIUS, LINE_WIDTH
+from constants import SHOT_RADIUS, LINE_WIDTH, SHOW_HITBOXES
 
 class Shot(CircleShape):
     def __init__(self, x: float, y: float) -> None:
@@ -9,6 +9,9 @@ class Shot(CircleShape):
     #override
     def draw(self, screen: pygame.Surface) -> None:
         pygame.draw.circle(screen, "blue", self.position, self.radius, LINE_WIDTH)
+
+        if SHOW_HITBOXES:
+            pygame.draw.circle(screen, "red", self.position, self.hitbox_radius, LINE_WIDTH)
 
     #override
     def update(self, dt: float) -> None:

@@ -15,12 +15,16 @@ class Asteroid(CircleShape):
         ]
         radius = self.kind * ASTEROID_MIN_RADIUS
         super().__init__(x, y, radius)
+        self.hitbox_radius = radius * ASTEROID_MIN_POINT_PERCENTAGE
 
     #override
     def draw(self, screen: pygame.Surface) -> None:
         line_width = LINE_WIDTH # only outline 
         # line_width = 0 # filled in asteroids, 0 is the default for polygon, we give it explicitly    
         pygame.draw.polygon(screen, self.color, self.rock(), width=line_width)
+
+        if SHOW_HITBOXES:
+            pygame.draw.circle(screen, "red", self.position, self.hitbox_radius, LINE_WIDTH)
 
     #overide
     def update(self, dt: float) -> None:
