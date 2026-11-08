@@ -48,12 +48,15 @@ def main():
 
         # detecting collisions
         for astr in asteroids:
-            if player.collides_with(astr):
-                log_event("player_hit")
-                print("Game over!")
-                # update the scores file
-                score.update_scores()
-                sys.exit()
+            if player.invincibility_cooldown <= 0 and player.collides_with(astr):
+                if player.lives <= 0:
+                    log_event(f"Game over! No lives remaining")
+                    print("Game over!")
+                    score.update_scores()
+                    sys.exit()
+                log_event(f"player_hit, {player.lives} life remaining")
+                player.hit_asteroid()
+                break
 
             for shot in shots:
                 if astr.collides_with(shot):

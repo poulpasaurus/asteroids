@@ -6,8 +6,11 @@ from constants import *
 class Player(CircleShape):
     def __init__(self, x: float, y: float, radius: float = PLAYER_RADIUS) -> None:
         super().__init__(x, y, radius)
-        self.rotation = 0.0
+        self.rotation = 180.0
         self.shot_cooldown = 0.0
+        self.lives = PLAYER_LIVES
+        self.invincibility_cooldown = 0.0 # after getting hit
+        self.immobilized_cooldown = 0.0 #after getting hit
 
     def triangle(self) -> list[pygame.Vector2]:
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -19,7 +22,10 @@ class Player(CircleShape):
 
     # override
     def draw(self, screen: pygame.Surface) -> None:
-        pygame.draw.polygon(screen, "white", self.triangle(), width=LINE_WIDTH)
+        if self.immobilized_cooldown < 0:
+            pygame.draw.polygon(screen, "white", self.triangle(), width=LINE_WIDTH)
+        else: #blinking when respawning
+            pass
 
     def rotate (self, dt: float) -> None:
         self.rotation += PLAYER_TURN_SPEED * dt
@@ -38,6 +44,10 @@ class Player(CircleShape):
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
 
+        self.immobilized_cooldown -= dt
+        if self.immobilized_cooldown > 0:
+            return
+
         if keys[pygame.K_z]:
             self.move(dt)
         if keys[pygame.K_s]:
@@ -53,6 +63,7 @@ class Player(CircleShape):
             self.shoot()
 
         self.off_screen_wrap()
+        self.invincibility_cooldown -= dt
 
     def shoot(self) ->None:
         # if we waited long enough, we can shoot
@@ -64,3 +75,12 @@ class Player(CircleShape):
         rotated_vect = unit_vect.rotate(self.rotation)
         rotated_speed_vect = rotated_vect * PLAYER_SHOOT_SPEED
         shot.velocity = rotated_speed_vect
+
+    def hit_asteroid(self) -> None:
+        self.lives -= 1
+        self.invincibility_cooldown = PLAYER_INVINCIBILITY_WINDOW
+        self.immobilized_cooldown = PLAYER_IMMOBILIZED_WINDOW
+        # respawn in the middle of the screen
+        self.rotation = 180.0
+        self.velocity = pygame.Vector2(0, 0)
+        self.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
