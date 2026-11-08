@@ -11,19 +11,25 @@ class Player(CircleShape):
         self.lives = PLAYER_LIVES
         self.invincibility_cooldown = 0.0 # after getting hit
         self.immobilized_cooldown = 0.0 #after getting hit
-
-    def triangle(self) -> list[pygame.Vector2]:
+    
+    def ship(self) -> list[pygame.Vector2]:
+        """
+        draw the player ship
+        """
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         right = pygame.Vector2(0, 1).rotate(self.rotation + 90) * self.radius / 1.5
         a = self.position + forward * self.radius
         b = self.position - forward * self.radius - right
         c = self.position - forward * self.radius + right
-        return [a, b, c]
+        # little back wings
+        d = b - 0.25 * (a - b)
+        e = c - 0.25 * (a - c)
+        return [a, b, d, b, c, e]
 
     # override
     def draw(self, screen: pygame.Surface) -> None:
         if self.immobilized_cooldown < 0:
-            pygame.draw.polygon(screen, "white", self.triangle(), width=LINE_WIDTH)
+            pygame.draw.polygon(screen, "white", self.ship(), width=LINE_WIDTH)
         else: #blinking when respawning
             pass
 
