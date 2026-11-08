@@ -11,6 +11,9 @@ class Player(CircleShape):
         self.lives = PLAYER_LIVES
         self.invincibility_cooldown = 0.0 # after getting hit
         self.immobilized_cooldown = 0.0 #after getting hit
+        # keep momentum
+        self.previous_velocities: list[pygame.Vector2] = []
+        self.old_velocity: pygame.Vector2 = pygame.Vector2(0, 0)
     
     def ship(self) -> list[pygame.Vector2]:
         """
@@ -38,15 +41,11 @@ class Player(CircleShape):
 
     def move(self, dt: float) -> None:
         unit_vector = pygame.Vector2(0, 1)
-        # unit_vector.rotate() returns a new vector – it doesn't modify the original
+        # .rotate() returns a new vector, it doesn't modify the original
         rotated_vector = unit_vector.rotate(self.rotation)
-        # the rotation works by changing using the polar form (length r and angle a) so x = r * cos(a), y = r * sin(a)
-        # so rotating by θ is : 
-        #   x' = r*cos(a+θ) = r·cos α·cos θ − r·sin α·sin θ = x·cos θ − y·sin c
-        #   y' = r*sin(a+θ) = r·sin α·cos θ + r·cos α·sin θ = x·sin θ + y·cos θ
-        rotated_speed_vector = rotated_vector * dt * PLAYER_SPEED
-        self.position += rotated_speed_vector
-
+        self.velocity = rotated_vector * dt * PLAYER_SPEED
+        self.position += self.velocity
+    
     def update(self, dt: float) -> None:
         keys = pygame.key.get_pressed()
 
@@ -54,10 +53,12 @@ class Player(CircleShape):
         if self.immobilized_cooldown > 0:
             return
 
+        self.old_velocity -= self.old_velocity * dt
+        self.position += self.old_velocity
+
         if keys[pygame.K_z]:
+            self.old_velocity = self.velocity
             self.move(dt)
-        if keys[pygame.K_s]:
-            self.move(-dt)
         
         if keys[pygame.K_q]:
             self.rotate(-dt)
@@ -89,4 +90,5 @@ class Player(CircleShape):
         # respawn in the middle of the screen
         self.rotation = 180.0
         self.velocity = pygame.Vector2(0, 0)
+        self.old_velocity = pygame.Vector2(0, 0)
         self.position = pygame.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
