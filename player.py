@@ -6,6 +6,7 @@ from constants import *
 class Player(CircleShape):
     def __init__(self, x: float, y: float, radius: float = PLAYER_RADIUS) -> None:
         super().__init__(x, y, radius)
+        self.hitbox_radius = radius * PLAYER_HITBOX_PERCENTAGE
         self.rotation = 180.0
         self.shot_cooldown = 0.0
         self.lives = PLAYER_LIVES
@@ -35,6 +36,9 @@ class Player(CircleShape):
             pygame.draw.polygon(screen, "white", self.ship(), width=LINE_WIDTH)
         else: #blinking when respawning
             pass
+
+        if SHOW_HITBOXES:
+            pygame.draw.circle(screen, "red", self.position, self.hitbox_radius, LINE_WIDTH)
 
     def rotate (self, dt: float) -> None:
         self.rotation += PLAYER_TURN_SPEED * dt

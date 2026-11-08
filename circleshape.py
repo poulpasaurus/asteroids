@@ -15,6 +15,7 @@ class CircleShape(pygame.sprite.Sprite):
         self.position: pygame.Vector2 = pygame.Vector2(x, y)
         self.velocity = pygame.Vector2(0, 0)
         self.radius = radius
+        self.hitbox_radius = radius
 
     def draw(self, screen: pygame.Surface) -> None:
         # must override
@@ -26,7 +27,7 @@ class CircleShape(pygame.sprite.Sprite):
 
     def collides_with(self, other: "CircleShape") -> bool:
         dist = self.position.distance_to(other.position)
-        return dist <= (self.radius + other.radius)
+        return dist <= (self.hitbox_radius + other.hitbox_radius)
 
     def off_screen_wrap(self, wrap_margin=None) -> None:
         """
