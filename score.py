@@ -18,7 +18,7 @@ class Score():
 
     def read_scores_file(self) -> list[int]:
         """
-        Read the scores in 'file' and return a them as a list in descending order if present
+        Read the scores in 'file' and return them as a list in descending order if present
         Return an empty list if the file is empty or doesn't exist
         """
         scores = []
@@ -28,15 +28,15 @@ class Score():
                 scores = [int(s[:-1]) for s in scores_txt]
                 scores.sort(reverse=True)
         except OSError:
-            log_event("[ERROR] Score file doesn't exists")
+            log_event("[ERROR] Score file doesn't exist")
         except:
-            log_event("[ERROR] Score file if wrongly formated")
+            log_event("[ERROR] Score file is wrongly formatted")
         return scores
     
     def update_scores(self) -> None:
         """
         Update the scores file with the score after each game.
-        Only keep the HIGH_SCORES_TAB_LENGTH bests
+        Only keep the HIGH_SCORES_TAB_LENGTH best
         """
         try:
             scores = self.read_scores_file()
@@ -46,7 +46,7 @@ class Score():
             with open(SCORES_FILE, "w") as f:
                 f.writelines([str(sc) + "\n" for sc in scores[:HIGH_SCORES_TAB_LENGTH]])
         except OSError:
-            log_event("[ERROR] Score file doesn't exists")
+            log_event("[ERROR] Score file doesn't exist")
         except:
             log_event("[ERROR] Failed to write scores file")
 

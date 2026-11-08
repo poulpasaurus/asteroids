@@ -36,7 +36,7 @@ ASTEROID_MIN_RADIUS = 20
 ASTEROID_KINDS = 3
 ASTEROID_SPAWN_RATE_SECONDS = 1.2
 ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
-# kind 1 asteroids are the smallets and worth the most points
+# kind 1 asteroids are the smallest and worth the most points
 ASTEROIDS_SCORE = {1: 100, 2: 50, 3: 20}
 # shades of grey
 ASTEROID_COLORS = [(61, 61, 61), (100, 100, 100), (114, 114, 114), (161, 161, 161)]
