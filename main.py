@@ -6,6 +6,7 @@ from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from shot import Shot
+from weapon import Weapon, Blaster, Burst, RocketLauncher
 from score import Score
 from particle import Particle
 
@@ -13,6 +14,7 @@ def main():
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     # print(f"Screen width: {SCREEN_WIDTH}")
     # print(f"Screen height: {SCREEN_HEIGHT}")
+    weapon = menu_temp()
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
@@ -32,7 +34,7 @@ def main():
     
     x = SCREEN_WIDTH / 2
     y = SCREEN_HEIGHT / 2
-    player = Player(x, y)
+    player = Player(x, y, weapon)
     asteroid_field = AsteroidField()
 
     score = Score()
@@ -64,8 +66,8 @@ def main():
                 if astr.collides_with(shot):
                     log_event("asteroid_shot")
                     score.increase(astr.kind)
-                    shot.kill()
                     astr.split()
+                    shot.hit_asteroid()
                     break
 
         # use each object draw method since we don't use images
@@ -77,6 +79,16 @@ def main():
                 
         pygame.display.flip()
         dt = clock.tick(60) / 1000
+
+def menu_temp() -> Weapon:
+    print("chose weapon: \n  1. blaster\n  2. burst\n  3. rocket launcher")
+    choice = int(input())
+    if choice == 2:
+        return Burst()
+    elif choice == 3:
+        return RocketLauncher()
+    else:
+        return Blaster()
 
 if __name__ == "__main__":
     main()

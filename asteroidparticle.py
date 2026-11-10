@@ -16,10 +16,7 @@ class AsteroidExplosionParticle(Particle):
         
         radius = random.randint(ASTEROID_PARTICLE_MIN_RADIUS, ASTEROID_PARTICLE_MAX_RADIUS)
         duration = random.uniform(THRUSTER_PARTICLE_MIN_DURATION, THRUSTER_PARTICLE_MAX_DURATION)
-        more_colors = []
-        more_colors.extend(ASTEROID_COLORS)
-        more_colors.extend(THRUSTER_PARTICLE_COLORS)
-        color = random.choice(more_colors)
+        color = random.choice(ASTEROID_COLORS)
         super().__init__(x, y, radius, duration, color)
 
     # override
