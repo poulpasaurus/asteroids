@@ -2,6 +2,7 @@ import pygame
 import random
 from circleshape import CircleShape
 from thrusterparticle import ThrusterParticle
+from weapon import Weapon, Blaster, Burst, RocketLauncher
 from shot import Shot
 from constants import *
 
@@ -10,7 +11,10 @@ class Player(CircleShape):
         super().__init__(x, y, radius)
         self.hitbox_radius = radius * PLAYER_HITBOX_PERCENTAGE
         self.rotation = 180.0
+        # weapon
         self.shot_cooldown = 0.0
+        self.weapon:Weapon = RocketLauncher()
+
         self.lives = PLAYER_LIVES
         self.invincibility_cooldown = 0.0 # after getting hit
         self.immobilized_cooldown = 0.0 #after getting hit
@@ -83,12 +87,10 @@ class Player(CircleShape):
         # if we waited long enough, we can shoot
         if self.shot_cooldown > 0:
             return
-        self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
-        shot = Shot(self.position.x, self.position.y)
+        self.shot_cooldown = self.weapon.get_cooldown()
         unit_vect = pygame.Vector2(0, 1)
         rotated_vect = unit_vect.rotate(self.rotation)
-        rotated_speed_vect = rotated_vect * PLAYER_SHOOT_SPEED
-        shot.velocity = rotated_speed_vect
+        self.weapon.shot(self.position.x, self.position.y, rotated_vect)
 
     def hit_asteroid(self) -> None:
         self.lives -= 1
